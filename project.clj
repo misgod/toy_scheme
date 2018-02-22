@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.trace "0.7.9"]
+                 [instaparse "1.4.8"]
                  ]
   :main ^:skip-aot toy-scheme.core
   :target-path "target/%s"

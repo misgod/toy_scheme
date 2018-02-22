@@ -1,11 +1,14 @@
 (ns toy-scheme.core
   (:require [clojure.tools.trace :refer :all]
-            [clojure.test :as t]))
+            [clojure.test :as t]
+            [instaparse.core :as insta]
+
+            ))
 
 
 
 
-(declare eval-seq scan-var form-apply extend-env setup-env eval-define)
+(declare eval-seq scan-var form-apply extend-env setup-env eval-define eval-if eval-cond)
 
 (defn form-eval [exp env]
   ;;(prn "eval" exp "===>\n" (keys (first (persistent! (env)))) )
@@ -13,10 +16,6 @@
             (or (number? x) (string? x) (nil? x) (instance? Boolean x)))
           (make-proc [param body env ]
             (list 'procedure  param body env))
-          (eval-if [exp env]
-            (if (form-eval (second exp) env)
-              (form-eval  (nth exp 2) env)
-              (form-eval  (nth exp 3) env)))
           (lookup-var [exp env]
             (scan-var exp
                       env
@@ -35,7 +34,7 @@
           (symbol? exp) (lookup-var exp env) 
           (= (first exp) 'quote) (second exp) 
           (= (first exp) 'if) (eval-if exp env)
-          ;(= (first exp) 'cond) (second exp)
+          (= (first exp) 'cond) (eval-cond exp env)
           (= (first exp) 'define) (eval-define exp env)
           (= (first exp) 'begin) (eval-seq (rest exp) env)
           (= (first exp) 'set!) (eval-assignment exp env)
@@ -73,6 +72,10 @@
                       '/   /
                       'eq? =
                       'not not
+                      'map map
+                      'reduce reduce
+                      'filter filter
+                      'list list
                       })
 (defn setup-env []
   (-> '()
@@ -98,7 +101,19 @@
   (let [var (define-var exp)
         val (define-val exp env)
         e (first env)]
-    (swap! e assoc var val)))
+    (swap! e assoc var val)
+    "ok"))
+
+(defn eval-if [exp env]
+  (if (form-eval (second exp) env)
+    (form-eval  (nth exp 2) env)
+    (form-eval  (nth exp 3) env)))
+
+(defn eval-cond [exp env]
+ ; (let [(rest exp)])
+
+
+  )
 
 
 (defn scan-var [var env action not-found]
@@ -152,3 +167,33 @@
                               (f (- x 1) (* x y))))
                           (f 5 1))
                         (setup-env))))
+
+
+
+
+(def validate
+  (insta/parser
+    "S = Symbol | Form
+     Symbol = #'[^() \"]*'
+     Symbol_Space = #'[^()\"]*'
+     Form = '(' (Symbol_Space*| Form*)* ')'"))
+
+
+(defn repl []
+  (let [global-env (setup-env)]
+    (loop [x ""]
+      (when (empty? x) 
+        (pr "repl => "))
+      (flush)
+      (let [input (read-line)
+            form (str x input)]
+        (cond
+          (= input "quit") "bye!"
+          (insta/failure? (validate form)) (recur form)
+          :else (do
+                  (prn  (form-eval (read-string form) global-env))
+                  (recur "")))))))
+
+
+
+
