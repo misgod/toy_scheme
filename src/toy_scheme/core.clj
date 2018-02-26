@@ -2,10 +2,7 @@
   (:require [clojure.tools.trace :refer :all]
             [clojure.test :as t]
             [instaparse.core :as insta]
-
-            ))
-
-
+            [sc.api]))
 
 
 (declare eval-seq scan-var form-apply extend-env setup-env eval-define eval-if eval-cond)
@@ -21,7 +18,7 @@
                       env
                       #(get (deref %) exp)
                       #(throw (Exception. "wrong binding id!")) ))
-        
+
           (eval-assignment [exp env]
             (let [var (second exp)
                   val (nth exp 2)]
@@ -29,10 +26,10 @@
                         env
                         #(swap! % assoc var (form-eval val env))
                         #(throw (Exception. "wrong binding id!")))))]
-    
+
     (cond (constant? exp) exp
-          (symbol? exp) (lookup-var exp env) 
-          (= (first exp) 'quote) (second exp) 
+          (symbol? exp) (lookup-var exp env)
+          (= (first exp) 'quote) (second exp)
           (= (first exp) 'if) (eval-if exp env)
           (= (first exp) 'cond) (eval-cond exp env)
           (= (first exp) 'define) (eval-define exp env)
@@ -64,6 +61,7 @@
 (def primitive-procs {
                       'true true
                       'false false
+                      'count count
                       'car first
                       'cdr rest
                       '+   +
@@ -126,10 +124,16 @@
   (reduce #(form-eval %2 env) nil exps))
 
 
+
 (defn extend-env [env vars vals]
-  (if (= (count vars) (count vals))
-    (cons (atom (zipmap vars vals)) env)
-    (throw (Exception. "arguments not match!" env))))
+  (loop [vr vars vl vals vmap {}]
+    (let [x (first vr)
+          y (first vl)]
+      (cond
+        (and (nil? x) (nil? y)) (cons (atom vmap) env)
+        (or (nil? x) (nil? y)) (throw (Exception. "arguments not match!" env))
+        (= x '.) (recur nil nil  (assoc vmap (second vr) vl))
+        :else (recur (rest vr) (rest vl) (assoc vmap x y))))))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -139,13 +143,15 @@
 
 
 (t/is (= 34 (form-eval '(- (+ (* 2 3 5) 1 6) (+ 1 2)) (setup-env))))
-(t/is (= 2 (form-eval '(if false 1 2) (setup-env)))) 
+(t/is (= 2 (form-eval '(if false 1 2) (setup-env))))
 (t/is (= 1 (form-eval '(if true 1 2) (setup-env))))
 
 (t/is (= 'a (form-eval '(quote a) (setup-env))))
 
 (t/is (= 11 (form-eval '((lambda (a b) (+ a b)) 6 5) (setup-env))))
 (t/is (= 22 (form-eval '((lambda (x) (* 2 x)) ((lambda (a b) (+ a b)) 6 5)) (setup-env))))
+
+(t/is (= 15 (form-eval '((lambda (a b . c) (+ a  b (count c))) 6 5 4 3 2 1) (setup-env))))
 
 (t/is (= 6 (form-eval '((lambda (x) (begin (set! x  (+ x 1)) x)) 5) (setup-env))))
 
@@ -182,7 +188,7 @@
 (defn repl []
   (let [global-env (setup-env)]
     (loop [x ""]
-      (when (empty? x) 
+      (when (empty? x)
         (pr "repl => "))
       (flush)
       (let [input (read-line)
@@ -193,7 +199,3 @@
           :else (do
                   (prn  (form-eval (read-string form) global-env))
                   (recur "")))))))
-
-
-
-
