@@ -7,7 +7,6 @@
                  [org.clojure/tools.trace "0.7.9"]
                  [instaparse "1.4.8"]
                  [vvvvalvalval/scope-capture "0.1.4"]
-                 [cider/cider-nrepl "0.21.1"]
                  ]
 
   :injections [(require 'sc.api)]
