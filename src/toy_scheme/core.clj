@@ -6,23 +6,22 @@
             [sc.api]))
 
 
-(declare macroexpand env-find env-get eval-seq  form-apply extend-env setup-env 
-         eval-define eval-lambda eval-if eval-defmacro eval-cond eval-assignment eval-let*)
+(declare  form-eval form-apply  eval-seq setup-env extend-env  env-find env-get  
+          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*
+          macroexpand)
+
 
 (defn form-eval [exp env]
-  ;;(prn "eval" exp "===>\n" (keys (first (persistent! (env)))) )
   (let [constant? (fn [x] (or (number? x)
                               (string? x)
                               (nil? x)
                               (instance? Boolean x)))
 
-        ;;exp (macroexpand exp env)
-        ]
+        exp (macroexpand exp env)]
     (cond (constant? exp)         exp
           (symbol? exp)           (env-get exp env)
           (= (first exp) 'quote)  (second exp)
           (= (first exp) 'if)     (eval-if exp env)
-          (= (first exp) 'cond)   (eval-cond exp env)
           (= (first exp) 'define) (eval-define exp env)
           (= (first exp) 'begin)  (eval-seq (rest exp) env)
           (= (first exp) 'set!)   (eval-assignment exp env)
@@ -35,7 +34,6 @@
 
 
 (defn form-apply [proc args]
-  ;(prn "apply:" (take 10 proc) "=>" args)
   (letfn [(primitive? [p] (= (first p) 'primitive))
           (apply-primitive [p a] (apply (second p) a)) ;;<-- magic
           (compound? [p] (= (first p) 'procedure))
@@ -59,34 +57,15 @@
                       '*   *
                       '/   /
                       'eq? =
+                      '=   =
                       'not not
                       'map map
                       'reduce reduce
                       'filter filter
                       'list list
+                      'print  prn
                       'cons cons
                       })
-(defn setup-env []
-  (-> '()
-      (extend-env (keys primitive-procs)
-                  (map #(list 'primitive %) (vals primitive-procs)))
-      ;;above is base env
-      (extend-env '() '()))) ;;avoid to modify base env
-
-
-(defn define-var [exp]
-  (let [var (second exp)]
-    (if (coll? var)
-      (first var)
-      var)))
-
-(defn define-val [exp env]
-  (let [var (second exp)
-        make-lambda #(cons 'lambda  (cons %1 %2))]
-    (if (coll? var)
-      (form-eval (make-lambda (rest var) (drop 2 exp)) env)
-      (form-eval (nth exp 2) env))))
-
 
 (defn eval-define [exp env]
   (let [var (define-var exp)
@@ -103,10 +82,6 @@
               #(swap! % assoc var (form-eval val env))
               #(throw (Exception. "wrong binding id!")))))
 
-(defn env-set! [var val]
-  )
-
-
 (defn eval-lambda [exp env]
   (list 'procedure
         (second exp)
@@ -119,26 +94,46 @@
     (form-eval  (nth exp 2) env)
     (form-eval  (nth exp 3) env)))
 
-(defn eval-cond [exp env]
- ; (let [(rest exp)])
-  )
-
-(defn env-find [var env action not-found]
-  (loop [env env]
-    (let [e (first env)]
-      (cond (nil? e)           (not-found)
-            (contains? @e var) (action e)
-            :else              (recur (rest env))))))
-
-(defn env-get [var env] 
-  (env-find var env
-            #(get (deref %) var)
-            #(throw (Exception. "wrong binding id!"))))
-
 
 (defn eval-seq [exps env]
   (reduce #(form-eval %2 env) nil exps))
 
+(defn eval-let* [exp env]
+  (let [eenv (extend-env env '() '())
+        vars (second exp)]
+    (doseq [[b e] vars]
+      (swap! (first eenv) assoc b (form-eval e eenv)))
+    (form-eval (nth exp 2) eenv)))
+
+(defn eval-defmacro [exp env]
+  (let [[a1 a2 a3] exp
+        mbody      (with-meta (form-eval a3 env) {:ismacro true})]
+    (swap! (first env) assoc a2  mbody)
+    nil) )
+
+
+;;; enviroment ;;;
+
+(defn setup-env []
+  (-> '()
+      (extend-env (keys primitive-procs)
+                  (map #(list 'primitive %) (vals primitive-procs)))
+      ;;above is base env
+      (extend-env '() '())))
+
+
+(defn define-var [exp]
+  (let [var (second exp)]
+    (if (coll? var)
+      (first var)
+      var)))
+
+(defn define-val [exp env]
+  (let [var (second exp)
+        make-lambda #(cons 'lambda  (cons %1 %2))]
+    (if (coll? var)
+      (form-eval (make-lambda (rest var) (drop 2 exp)) env)
+      (form-eval (nth exp 2) env))))
 
 
 (defn extend-env [env vars vals]
@@ -152,26 +147,21 @@
         :else                    (recur (rest vr) (rest vl) (assoc vmap x y))))))
 
 
-(defn eval-let* [exp env]
-  (let [eenv (extend-env env '() '())
-        vars (second exp)]
-    (doseq [[b e] vars]
-      (swap! (first eenv) assoc b (form-eval e eenv)))
-    (form-eval (nth exp 2) eenv)))
+(defn env-find [var env action not-found]
+  (loop [env env]
+    (let [e (first env)]
+      (cond (nil? e)           (not-found)
+            (contains? @e var) (action e)
+            :else              (recur (rest env))))))
 
-(defn eval-defmacro [exp env]
-  (prn "eval-defmacro" exp) 
-  (let [[a1 a2 a3] exp
-        mbody      (with-meta a3 {:ismacro true})]
-    (prn "--->" mbody)   
-    (swap! (first env) assoc a2  mbody)
-    (prn "===" (second env) )
-    (prn "===="   env)
-    nil) )
+(defn env-get [var env]
+  (env-find var env
+            #(get (deref %) var)
+            #(throw (Exception. "wrong binding id!"))))
 
+;;;; macro ;;;;
 
 (defn is-macro-call [exp env]
-  (prn "is-macro-call" exp)
   (and (seq? exp)
        (symbol? (first exp))
        (env-find (first exp)
@@ -181,7 +171,6 @@
 
 
 (defn macroexpand [exp env]
-  (prn "macroexpand" exp)
   (loop [exp exp]
     (if (is-macro-call exp env)
       (let [mac (env-get (first exp) env)]
@@ -211,9 +200,8 @@
       (flush)
       (let [input (read-line)
             form (str x input)]
-        (cond
-          (= input "quit") "bye!"
-          (insta/failure? (validate form)) (recur form)
+        (if (insta/failure? (validate form)) 
+          (recur form)
           :else (do
                   (prn  (form-eval (read-string form) global-env))
                   (recur "")))))))
@@ -221,31 +209,3 @@
 
 (defn -main  [& args] (repl))
 
-; (def eee (setup-env))
-
-; (try
-;   (form-eval
-;    '(defmacro when
-;       (lambda (test . branch)
-;               (list 'if test
-;                     (cons 'begin branch)))) eee)
-;   (catch Exception e
-;     (clojure.stacktrace/print-stack-trace e)))
-
-;  (try
-;    (form-eval '(macroexpand (when (= 1 1) (+ 1 1))) eee)
-;    (catch Exception e
-;      (clojure.stacktrace/print-stack-trace e)))
-;  (try
-; (form-eval '(define (fact x)
-;               (if (eq? x 1)
-;                 1
-;                 (* x (fact (- x 1))))) (setup-env))
-; (catch Throwable e
-;      (clojure.stacktrace/print-stack-trace e)))
-
-; ; eee
-
-; (form-eval
-;  '(when (= 1 1) (+ 1 1)) eee
-;  )
