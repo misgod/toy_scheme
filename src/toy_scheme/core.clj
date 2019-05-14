@@ -6,19 +6,13 @@
             [sc.api]))
 
 
-(declare  form-eval form-apply  eval-seq setup-env extend-env  env-find env-get  
-          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*
-          macroexpand)
+(declare  form-eval form-apply self-evaluating? eval-seq setup-env extend-env  env-find env-get  
+          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*  macroexpand)
 
 
 (defn form-eval [exp env]
-  (let [constant? (fn [x] (or (number? x)
-                              (string? x)
-                              (nil? x)
-                              (instance? Boolean x)))
-
-        exp (macroexpand exp env)]
-    (cond (constant? exp)         exp
+  (let [exp (macroexpand exp env)]
+    (cond (self-evaluating? exp)  exp
           (symbol? exp)           (env-get exp env)
           (= (first exp) 'quote)  (second exp)
           (= (first exp) 'if)     (eval-if exp env)
@@ -38,8 +32,8 @@
           (apply-primitive [p a] (apply (second p) a)) ;;<-- magic
           (compound? [p] (= (first p) 'procedure))
           (proc-params [p] (second p))
-          (proc-body [p] (nth proc 2))
-          (proc-env [p] (nth proc 3))]
+          (proc-body [p] (nth p 2))
+          (proc-env [p] (nth p 3))]
     (cond (primitive? proc) (apply-primitive proc args)
           (compound? proc)  (eval-seq (proc-body proc)
                                       (extend-env (proc-env proc)
@@ -67,16 +61,14 @@
                       'cons cons
                       })
 
-(defn eval-define [exp env]
-  (let [var (define-var exp)
-        val (define-val exp env)
-        e (first env)]
-    (swap! e assoc var val)))
-
+(defn self-evaluating? [x] 
+  (or (number? x)
+      (string? x)
+      (nil? x)
+      (instance? Boolean x)))
 
 (defn eval-assignment [exp env]
-  (let [var (second exp)
-        val (nth exp 2)]
+  (let [[op var val] exp]
     (env-find var
               env
               #(swap! % assoc var (form-eval val env))
@@ -90,26 +82,27 @@
 
 
 (defn eval-if [exp env]
-  (if (form-eval (second exp) env)
-    (form-eval  (nth exp 2) env)
-    (form-eval  (nth exp 3) env)))
+  (let [[a0 a1 a2 a3] exp]
+    (if (form-eval a1 env)
+      (form-eval a2 env)
+      (form-eval a3 env))))
 
 
 (defn eval-seq [exps env]
   (reduce #(form-eval %2 env) nil exps))
 
 (defn eval-let* [exp env]
-  (let [eenv (extend-env env '() '())
-        vars (second exp)]
+  (let [eenv (extend-env env)
+        [op vars body] exp]
     (doseq [[b e] vars]
       (swap! (first eenv) assoc b (form-eval e eenv)))
-    (form-eval (nth exp 2) eenv)))
+    (form-eval body eenv)))
 
 (defn eval-defmacro [exp env]
-  (let [[a1 a2 a3] exp
-        mbody      (with-meta (form-eval a3 env) {:ismacro true})]
-    (swap! (first env) assoc a2  mbody)
-    nil) )
+  (let [[a0 a1 a2] exp
+        mbody (with-meta (form-eval a2 env) {:ismacro true})]
+    (swap! (first env) assoc a1  mbody)
+    nil))
 
 
 ;;; enviroment ;;;
@@ -119,40 +112,50 @@
       (extend-env (keys primitive-procs)
                   (map #(list 'primitive %) (vals primitive-procs)))
       ;;above is base env
-      (extend-env '() '())))
+      (extend-env)))
 
 
 (defn define-var [exp]
   (let [var (second exp)]
-    (if (coll? var)
+    (if (seq? var)
       (first var)
       var)))
 
 (defn define-val [exp env]
   (let [var (second exp)
         make-lambda #(cons 'lambda  (cons %1 %2))]
-    (if (coll? var)
+    (if (seq? var)
       (form-eval (make-lambda (rest var) (drop 2 exp)) env)
       (form-eval (nth exp 2) env))))
 
 
-(defn extend-env [env vars vals]
-  (loop [vr vars vl vals vmap {}]
-    (let [x (first vr)
-          y (first vl)]
-      (cond
-        (and (nil? x) (nil? y))  (cons (atom vmap) env)
-        (or (nil? x) (nil? y))   (throw (Exception. "arguments not match!" env))
-        (= x '.)                 (recur nil nil (assoc vmap (second vr) vl))
-        :else                    (recur (rest vr) (rest vl) (assoc vmap x y))))))
+(defn eval-define [exp env]
+  (let [var (define-var exp)
+        val (define-val exp env)]
+    (swap! (first env) assoc var val))
+  "ok")
+
+
+(defn extend-env
+  ([env]
+   (extend-env env '() '()))
+  
+  ([env vars vals]
+   (loop [vr vars vl vals vmap {}]
+     (let [x (first vr)
+           y (first vl)]
+       (cond
+         (and (nil? x) (nil? y))  (cons (atom vmap) env)
+         (or (nil? x) (nil? y))   (throw (Exception. "arguments not match!" env))
+         (= x '.)                 (recur nil nil (assoc vmap (second vr) vl))
+         :else                    (recur (rest vr) (rest vl) (assoc vmap x y)))))))
 
 
 (defn env-find [var env action not-found]
-  (loop [env env]
-    (let [e (first env)]
-      (cond (nil? e)           (not-found)
-            (contains? @e var) (action e)
-            :else              (recur (rest env))))))
+  (loop [[e & tail] env]
+    (cond (nil? e)       (not-found)
+      (contains? @e var) (action e)
+      :else              (recur tail))))
 
 (defn env-get [var env]
   (env-find var env
@@ -166,7 +169,7 @@
        (symbol? (first exp))
        (env-find (first exp)
                  env
-                 #(:ismacro (meta (get (deref %) (first exp))))
+                 #(:ismacro (meta (get @% (first exp))))
                  #(identity false))))
 
 
@@ -177,12 +180,7 @@
         (recur (form-apply mac (rest exp))))
       exp)))
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
 
 (def validate
   (insta/parser
@@ -196,16 +194,14 @@
   (let [global-env (setup-env)]
     (loop [x ""]
       (when (empty? x)
-        (pr "repl => "))
+        (print "my scheme => "))
       (flush)
-      (let [input (read-line)
-            form (str x input)]
+      (let [form (str x (read-line))]
         (if (insta/failure? (validate form)) 
           (recur form)
-          :else (do
-                  (prn  (form-eval (read-string form) global-env))
-                  (recur "")))))))
+          (do
+            (prn  (form-eval (read-string form) global-env))
+            (recur "")))))))
 
 
 (defn -main  [& args] (repl))
-
