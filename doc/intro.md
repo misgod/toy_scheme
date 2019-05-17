@@ -20,10 +20,11 @@ paginate: true
 
 ---
 
-## A Interpreter
+## An Interpreter
 
 
-program ➡ parse ➡ AST ➡ eval ➡ result
+
+![bg fit 90%](https://i.imgur.com/dfnFDZ8.png)
 
 ---
 
@@ -33,9 +34,9 @@ program ➡ parse ➡ AST ➡ eval ➡ result
 
 ---
 ## Eval & Apply
+<!-- _backgroundColor: #ffffff -->
 
-
-![center](http://www.sicpdistilled.com/images/evalapply-dae3af78.png)
+![](http://www.sicpdistilled.com/images/evalapply-dae3af78.png)
 
 
 ---
@@ -50,11 +51,11 @@ program ➡ parse ➡ AST ➡ eval ➡ result
           (symbol? exp)           (env-get exp env)
           (= (first exp) 'quote)  (second exp)
           (= (first exp) 'if)     (eval-if exp env)
-          (= (first exp) 'define) (eval-define exp env)
           (= (first exp) 'begin)  (eval-seq (rest exp) env)
+          (= (first exp) 'lambda) (eval-lambda exp env)
+          (= (first exp) 'define) (eval-define exp env)
           (= (first exp) 'set!)   (eval-assignment exp env)
           (= (first exp) 'let*)   (eval-let* exp env)
-          (= (first exp) 'lambda) (eval-lambda exp env)
           (= (first exp) 'defmacro) (eval-defmacro exp env)
           (= (first exp) 'macroexpand) (macroexpand (second exp) env)
           :else (form-apply (form-eval (first exp) env)
@@ -99,17 +100,14 @@ program ➡ parse ➡ AST ➡ eval ➡ result
 
 ```Clojure
 (defn form-eval [exp env]
-    ;...
     (cond (self-evaluating? exp)  exp
           (symbol? exp) (env-get exp env)
-    ;....
 
 (defn self-evaluating? [x]
-  (or (number? x)
-      (string? x)
-      (nil? x)
-      (instance? Boolean x)))
-
+    (or (number? x)
+        (string? x)
+        (nil? x)
+        (instance? Boolean x)))
 ```
 
 ---
@@ -120,496 +118,318 @@ program ➡ parse ➡ AST ➡ eval ➡ result
 ( |#atom| <- |#atom|  <- |#atom|)
 
 
----
+```clojure
+
+(defn env-find [var env action not-found]  ...)
+
+(defn env-get [var env] ...)
+
+(defn env-set [var val env] ...)
 
 
-There's different types of fragments, like:
-
-grow    <!-- .element: class="fragment grow" -->
-
-shrink  <!-- .element: class="fragment shrink" -->
-
-fade-out    <!-- .element: class="fragment fade-out " -->
-
-fade-up (also down, left and right!) <!-- .element: class="fragment fade-up" -->
-
-current-visible <!-- .element: class="fragment current-visible" -->
-
-Highlight <span class="fragment highlight-red">red</span> <span class="fragment highlight-blue">blue</span> <span class="fragment highlight-green">green</span>
-
----
-
-## Transition Styles
-
-You can select from different transitions, like:
-[None](?transition=none#/transitions) - [Fade](?transition=fade#/transitions) - [Slide](?transition=slide#/transitions) - [Convex](?transition=convex#/transitions) - [Concave](?transition=concave#/transitions) - [Zoom](?transition=zoom#/transitions)
-
----
-
-## Themes
-
-reveal.js comes with a few themes built in:
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
-
----
-
-<!-- .slide: data-background="#dddddd" -->
-## Slide Backgrounds
-
-Set `data-background="#dddddd"` on a slide to change the background color. All CSS color formats are supported.
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-
---
-
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" -->
-
-## Image Backgrounds
-
-```markdown
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" -->
 ```
 
---
 
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px" -->
-
-## TILED BACKGROUNDS
-
-```markdown
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px" -->
+---
+### Initial Enviroment
+```clojure
+(defn setup-env []
+  (-> '()
+      (extend-env (keys primitive-procs)
+                  (map #(list 'primitive %) (vals primitive-procs)))
+      ;;above is base env
+      (extend-env)))
 ```
-
---
-
-<!-- .slide: data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000" -->
-
-## Video Backgrounds
-
-```markdown
-<!-- .slide: data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000" -->
-```
-
---
-
-<!-- .slide: data-background="http://i.giphy.com/90F8aUepslB84.gif" -->
-
-## ... and GIFs!
-
-```markdown
-<!-- .slide: data-background="http://i.giphy.com/90F8aUepslB84.gif" -->
+```clojure
+(def primitive-procs {'true true
+                      '+   +
+                      '-   -
+                      'car first
+                      ...
+                      })
 ```
 
 ---
 
-<!-- .slide: data-transition="slide" data-background="#4d7e65" data-background-transition="zoom" -->
+## quote
 
-## Background Transitions
-
-Different background transitions are available via the backgroundTransition option. This one's called "zoom".
-
----
-
-<!-- .slide: data-transition="slide" data-background="#b5533c" data-background-transition="zoom" -->
-
-## Background Transitions
-
-You can override background transitions per-slide.
-
----
-
-## Pretty Code
-```js
-function linkify( selector ) {
-  if( supports3DTransforms ) {
-
-    var nodes = document.querySelectorAll( selector );
-
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
-
-      if( !node.className ) {
-        node.className += ' roll';
-      }
-    }
-  }
-}
+```clojure
+(defn form-eval [exp env]
+    (cond (self-evaluating? exp)  exp
+          (symbol? exp)           (env-get exp env)
+          (= (first exp) 'quote)  (second exp)) ;;<- here
 ```
 
-Code syntax highlighting courtesy of [highlight.js](http://softwaremaniacs.org/soft/highlight/en/description/).
+
+- (quote 1) => 1
+- (quote a) => a
+- (quote (+ 1 1))  => (+ 1 1)
 
 ---
 
-## Marvelous List
+## if
 
-*   No order here
-*   Or here
-*   Or here
-*   Or here
+```clojure
+(defn form-eval [exp env]
+  (let [exp (macroexpand exp env)]
+    (cond (self-evaluating? exp)  exp
+          (symbol? exp)           (env-get exp env)
+          (= (first exp) 'quote)  (second exp)
+          (= (first exp) 'if)     (eval-if exp env)))) ; <- here
 
----
+(defn eval-if [exp env]
+  (let [[a0 a1 a2 a3] exp]
+    (if (form-eval a1 env)
+      (form-eval a2 env)
+      (form-eval a3 env))))
+```
 
-## Fantastic Ordered List
-
-1.  One is smaller than...
-2.  Two is smaller than...
-3.  Three!
-
----
-
-## Tabular Tables
-| Tables        | Are           | Cool  |
-| ------------- | :-----------: | ----: |
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      | $12   |
-| zebra stripes | are neat      | $1    |
+- (if <cond-expr> expr  else-expr)
 
 ---
 
-## Clever Quotes
+## Why if is a special form?
 
-These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">"The nice thing about standards is that there are so many to choose from"</q> and block:
+- Can we just write a if function?
 
-> "For years there has been a theory that millions of monkeys typing at random on millions of typewriters would reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue."
+```
+(defn iif [condition stat else]
+  (if (true? condition)
+      expr
+      else-expr))
 
----
+(iif true (+ 1 2) (* 0 0)) ;=> 3
 
-## Intergalactic Interconnections
+(iif false (+ 1 2) (* 0 0)) ;=> 0
 
-You can link between slides internally, [like this](#/2/3).
-
----
-
-## Speaker View
-
-There's a [speaker view](https://github.com/hakimel/reveal.js#speaker-notes). It includes a timer, preview of the upcoming slide as well as your speaker notes.
-
-Press the _S_ key to try it out.
-
-<aside class="notes">Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).</aside>
-
----
-
-## Export to PDF
-
-Presentations can be [exported to PDF](https://github.com/hakimel/reveal.js#pdf-export), here's an example:
-
-<iframe data-src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen=""></iframe>
-
----
-
-## Global State
-
-Set `data-state="something"` on a slide and `"something"` will be added as a class to the document element when the slide is open. This lets you apply broader style changes, like switching the page background.
-
----
-
-<!-- .slide: data-state="customevent" -->
-
-## State Events
-
-Additionally custom events can be triggered on a per slide basis by binding to the `data-state` name.
-```js
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
+(iif true (+ 1 2) (/ 0 0)) ;=> Error: ArithmeticException Divide by zero
 ```
 
 ---
 
-## Take a Moment
+## begin
 
-Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
+```clojure
+(defn form-eval [exp env]
+    (cond (self-evaluating? exp)  exp
+          (symbol? exp)           (env-get exp env)
+          (= (first exp) 'quote)  (second exp)
+          (= (first exp) 'if)     (eval-if exp env)
+          (= (first exp) 'begin)  (eval-seq (rest exp) env))) ; <-- here
+```
+
+```clojure
+(defn eval-seq [exp env]
+  (reduce #(form-eval %2 env) nil exp))
+```
+
+- like "do" in clojure
 
 ---
 
-## Much more
+## lambda
 
-*   Right-to-left support
-*   [Extensive JavaScript API](https://github.com/hakimel/reveal.js#api)
-*   [Auto-progression](https://github.com/hakimel/reveal.js#auto-sliding)
-*   [Parallax backgrounds](https://github.com/hakimel/reveal.js#parallax-background)
-*   [Custom keyboard bindings](https://github.com/hakimel/reveal.js#keyboard-bindings)
+```clojure
+(defn form-eval [exp env]
+  (cond (self-evaluating? exp)  exp
+     ; ...
+  (= (first exp) 'lambda) (eval-lambda exp env)))) ;<- here
+
+(defn eval-lambda [exp env]
+  (list 'procedure   ;<-- this is for form-apply
+        (second exp)
+        (drop 2 exp)
+        env))
+```
+
+- (lambda (x y) (+ x y))
+- (lambda () 5)
 
 ---
 
-## Plugins
+## define
 
---
-
-## search
-
-Handles finding a text string anywhere in the slides and showing the next occurrence to the user by navigatating to that slide and highlighting it.
-
-**Shortcut : `CTRL + SHIFT + F`**
-
-
---
-
-## Zoom
-
-Zoom anywhere on your presentation
-
-**Shortcut : `alt + click`: Zoom in. Repeat to zoom back out.**
-
---
-
-## Notes
-
-Add note to speaker view.
-
-Default markdown syntaxe is
-
-```text
-note: a custom note here
+```clojure
+(defn form-eval [exp env]
+  (let [exp (macroexpand exp env)]
+    (cond (self-evaluating? exp)  exp
+          ; ...
+          (= (first exp) 'define) (eval-define exp env)))) ;<-- here
 ```
 
---
+- (define x 1)
+- (define (f x y) (+ x y))
+- (define f (lambda (x y) (+ x y)))
 
-## Chalkboard
+---
+## eval-define
 
-Have you ever missed the traditional classroom experience where you can quickly sketch something on a chalkboard?
+```clojure
+(defn define-var [exp]
+    (if (seq? (second exp)) ;function?
+      (first (second exp)) ;it's a function so the var is function name
+      (second exp)))
 
-Just press 'b' or click on the pencil button to open and close your chalkboard.
+(defn define-val [exp env]
+  (let [var (second exp)
+        make-lambda #(cons 'lambda  (cons %1 %2))]
+    (if (seq? var) ;function?
+      (form-eval (make-lambda (rest var) (drop 2 exp)) env)
+      (form-eval (nth exp 2) env))))
 
---
-
-## Chalkboard
-
-- Click the `left mouse button` to write on the chalkboard
-- Click the `right mouse button` to wipe the chalkboard
-- Click the `DEL` key to clear the chalkboard
-
---
-
-## MAKE NOTES ON SLIDES
-
-Did you notice the <i class="fa fa-pencil"></i> button?
-
-By pressing 'c' or clicking the button you can start and stop the notes taking mode allowing you to write comments and notes directly on the slide.
-
---
-
-## Chart
-
-Add chart from simple string
-
---
-
-### Line chart from JSON string
-<canvas class="stretch" data-chart="line">
-<!--
-{
- "data": {
-  "labels": ["January"," February"," March"," April"," May"," June"," July"],
-  "datasets":[
-   {
-    "data":[65,59,80,81,56,55,40],
-    "label":"My first dataset","backgroundColor":"rgba(20,220,220,.8)"
-   },
-   {
-    "data":[28,48,40,19,86,27,90],
-    "label":"My second dataset","backgroundColor":"rgba(220,120,120,.8)"
-   }
-  ]
- },
- "options": { "responsive": "true" }
-}
--->
-</canvas>
-
---
-
-### Line chart with CSV data and JSON configuration
-
-<canvas class="stretch" data-chart="line">
-My first dataset,  65, 59, 80, 81, 56, 55, 40
-<!-- This is a comment -->
-My second dataset, 28, 48, 40, 19, 86, 27, 90
-<!--
-{
-"data" : {
-	"labels" : ["Enero", "Febrero", "Marzo", "Avril", "Mayo", "Junio", "Julio"],
-	"datasets" : [{ "borderColor": "#0f0", "borderDash": ["5","10"] }, { "borderColor": "#0ff" } ]
-	}
-}
--->
-</canvas>
-
---
-
-### Bar chart with CSV data
-
-<canvas class="stretch" data-chart="bar">
-,January, February, March, April, May, June, July
-My first dataset, 65, 59, 80, 81, 56, 55, 40
-My second dataset, 28, 48, 40, 19, 86, 27, 90
-</canvas>
-
---
-
-### Stacked bar chart from CSV file with JSON configuration
-<canvas class="stretch" data-chart="bar" data-chart-src="chart/data.csv">
-<!--
-{
-"data" : {
-"datasets" : [{ "backgroundColor": "#0f0" }, { "backgroundColor": "#0ff" } ]
-},
-"options": { "responsive": true, "scales": { "xAxes": [{ "stacked": true }], "yAxes": [{ "stacked": true }] } }
-}
--->
-</canvas>
-
---
-
-### Pie chart
-
-<canvas class="stretch" data-chart="pie">
-,Black, Red, Green, Yellow
-My first dataset, 40, 40, 20, 6
-My second dataset, 45, 40, 25, 4
-</canvas>
-
---
-
-## EMBEDDING A TWEET
-To embed a tweet, simply determine its URL and include the following code in your slides:
-
-```html
-<div class="tweet" data-src="TWEET_URL"></div>
+(defn eval-define [exp env]
+  (let [var (define-var exp)
+        val (define-val exp env)]
+    (swap! (first env) assoc var val)))
 ```
-
---
-
-<div class="tweet" data-src="https://twitter.com/Evilznet/status/1086984843056107525"></div>
-
---
-
-## menu
-
-A SLIDEOUT MENU FOR NAVIGATING REVEAL.JS PRESENTATIONS
-
---
-
-See the  <i class="fa fa-bars"></i>  in the corner?
-
-Click it and the menu will open from the side.
-
-Click anywhere on the slide to return to the presentation,
-or use the close button in the menu.
-
---
-
-If you don't like the menu button,
-you can use the slide number instead.
-
-Go on, give it a go.
-
-The menu button can be hidden using the options,
-but you need to enable the slide number link.
-
---
-
-Or you can open the menu by pressing the m key.
-
-You can navigate the menu with the keyboard as well.
-Just use the arrow keys and <space> or <enter> to change slides.
-
-You can disable the keyboard for the
-menu in the options if you wish.
-
---
-
-## LEFT OR RIGHT
-You can configure the menu to slide in from the left or right
-
---
-
-### MARKERS
-The slide markers in the menu can be useful to show
-you the progress through the presentation.
-
-You can hide them if you want.
-
-You can also show/hide slide numbers.
-
---
-
-### SLIDE TITLES
-The menu uses the first heading to label each slide
-but you can specify another label if you want.
-
-Use a data-menu-title attribute in the section element to give the slide a custom label, or add a menu-title class to any element in the slide you wish.
-
-You can change the titleSelector option and use
-any elements you like as the default for labelling each slide.
-
---
-
-## MathSVG
-
-An extension of the math.js plugin allowing to render LaTeX in SVG.
-
---
-
-### The Lorenz Equations
-
-\[\begin{aligned}
-\dot{x} &amp; = \sigma(y-x) \\
-\dot{y} &amp; = \rho x - y - xz \\
-\dot{z} &amp; = -\beta z + xy
-\end{aligned} \]
-
---
-
-### The Cauchy-Schwarz Inequality
-
-<script type="math/tex; mode=display">
-  \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-</script>
-
---
-
-### coucou footer
-
-Includes a footer in all the slides of a Reveal.js presentation (with optional exclusion of some slides) that will show the title of the presentation.
-
-
-
---
-
-## code-focus
-
-A plugin that allows focusing on specific lines of code blocks.
-
---
-
-### Code Focus Demo
-
-```js
-// Useless comment.
-alert('hi');
-```
-
-
-<span class="code-presenting-annotation fragment current-only" data-code-focus="1">Present code found within any repository source file.</span>
-<span class="code-presenting-annotation fragment current-only" data-code-focus="1-2">Without ever leaving your slideshow.</span>
 
 ---
 
-<!-- .slide: style="text-align: left;" -->
-# THE END
+## set!
 
-- [Try the online editor](http://slides.com)
-- [Source code & documentation](https://github.com/hakimel/reveal.js)
+```clojure
+(defn form-eval [exp env]
+    (cond (self-evaluating? exp)  exp
+          ;...
+          (= (first exp) 'set!)   (eval-assignment exp env))) ;<-- here
+
+
+(defn eval-assignment [exp env]
+  (let [[op var val] exp]
+    (env-set var val env)))
+```
+
+- (define x 5)
+  (set! x 10)
+
+
+---
+## let*
+
+
+```clojure
+(defn form-eval [exp env]
+    (cond (self-evaluating? exp)  exp
+          ;...
+          (= (first exp) 'let*)  (eval-let* exp env))) ;<--here
+
+(defn eval-let* [exp env]
+  (let [eenv (extend-env env)
+        [op vars body] exp]
+    (doseq [[b e] vars]
+      (swap! (first eenv) assoc b (form-eval e eenv)))
+    (form-eval body eenv)))
+```
+
+- (let* ((var val) ...) body)
+
+---
+
+## defmacro
+
+```clojure
+(defn form-eval [exp env]
+    (cond (self-evaluating? exp)  exp
+          ;...
+          (= (first exp) 'defmacro) (eval-defmacro exp env))); <-here
+
+(defn eval-defmacro [exp env]
+    (let [[a0 a1 a2] exp
+          mbody (with-meta (form-eval a2 env) {:ismacro true})]
+       (swap! (first env) assoc a1  mbody)
+       "ok"))
+```
+
+- (defmacro binding (lambda (args) body))
+
+---
+
+## macroexpand
+
+```clojure
+(defn form-eval [exp env]
+  (let [exp (macroexpand exp env)] ;<--here
+    (cond (self-evaluating? exp)  exp
+          (= (first exp) 'macroexpand) (macroexpand (second exp) env)))) ;<-- here
+
+(defn macroexpand [exp env]
+  (loop [exp exp]
+    (if (is-macro-call exp env)
+      (let [mac (env-get (first exp) env)]
+        (recur (form-apply mac (rest exp))))
+      exp)))
+```
+
+---
+## macroexpand (cont.)
+
+```clojure
+(defn is-macro-call [exp env]
+  (and (seq? exp)
+       (symbol?  (first exp))
+       (env-find (first exp)
+                 env
+                 #(:ismacro (meta (get @% (first exp))))
+                 #(identity false))))
+```
+
+---
+
+## to apply
+
+```clojure
+(defn form-eval [exp env]
+  (let [exp (macroexpand exp env)]
+    (cond (self-evaluating? exp)  exp
+          (symbol? exp)           (env-get exp env)
+          (= (first exp) 'quote)  (second exp)
+          (= (first exp) 'if)     (eval-if exp env)
+          (= (first exp) 'begin)  (eval-seq (rest exp) env)
+          (= (first exp) 'lambda) (eval-lambda exp env)
+          (= (first exp) 'define) (eval-define exp env)
+          (= (first exp) 'set!)   (eval-assignment exp env)
+          (= (first exp) 'let*)   (eval-let* exp env)
+          (= (first exp) 'defmacro) (eval-defmacro exp env)
+          (= (first exp) 'macroexpand) (macroexpand (second exp) env)
+          :else (form-apply (form-eval (first exp) env)  ;<-- here
+                            (map #(form-eval % env) (rest exp)))))
+```
+
+---
+
+## apply
+
+```clojure
+(defn form-apply [proc args]
+  (letfn [(primitive? [p] (= (first p) 'primitive))
+          (apply-primitive [p a] (apply (second p) a)) ;<-- magic
+          (procedure? [p] (= (first p) 'procedure)) ;<-- from lambda
+          (proc-params [p] (second p))
+          (proc-body [p] (nth p 2))
+          (proc-env [p] (nth p 3))]
+    (cond (primitive? proc) (apply-primitive proc args)
+          (procedure? proc) (eval-seq (proc-body proc)
+                                      (extend-env (proc-env proc)
+                                                  (proc-params proc)
+                                                  args)))))
+```
+
+---
+
+<!-- _class: lead -->
+## Now you can write your own Lisp
+## in Clojure
+
+---
+## Something else
+
+- Add your built-in functions
+- REPL
+
+---
+<!-- _color: #e0e0e0 -->
+<!-- class: lead -->
+# Question?
+
+
+![bg center](https://cdn.pixabay.com/photo/2018/08/19/01/04/thanks-3615884_1280.jpg)

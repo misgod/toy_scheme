@@ -6,8 +6,8 @@
             [sc.api]))
 
 
-(declare  form-eval form-apply self-evaluating? eval-seq setup-env extend-env  env-find env-get  
-          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*  macroexpand)
+(declare  form-eval form-apply self-evaluating? eval-seq setup-env extend-env  env-find env-set env-get  
+          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*  macroexpand built-in!)
 
 
 (defn form-eval [exp env]
@@ -30,12 +30,12 @@
 (defn form-apply [proc args]
   (letfn [(primitive? [p] (= (first p) 'primitive))
           (apply-primitive [p a] (apply (second p) a)) ;;<-- magic
-          (compound? [p] (= (first p) 'procedure))
+          (procedure? [p] (= (first p) 'procedure)) ;;<-- from lambda
           (proc-params [p] (second p))
           (proc-body [p] (nth p 2))
           (proc-env [p] (nth p 3))]
     (cond (primitive? proc) (apply-primitive proc args)
-          (compound? proc)  (eval-seq (proc-body proc)
+          (procedure? proc) (eval-seq (proc-body proc)
                                       (extend-env (proc-env proc)
                                                   (proc-params proc)
                                                   args)))))
@@ -50,15 +50,15 @@
                       '-   -
                       '*   *
                       '/   /
+                      '<   <
+                      '>   >
                       'eq? =
                       '=   =
                       'not not
-                      'map map
-                      'reduce reduce
-                      'filter filter
                       'list list
                       'print  prn
                       'cons cons
+                      'empty? empty?
                       })
 
 (defn self-evaluating? [x] 
@@ -69,10 +69,7 @@
 
 (defn eval-assignment [exp env]
   (let [[op var val] exp]
-    (env-find var
-              env
-              #(swap! % assoc var (form-eval val env))
-              #(throw (Exception. "wrong binding id!")))))
+    (env-set var val env)))
 
 (defn eval-lambda [exp env]
   (list 'procedure
@@ -88,8 +85,8 @@
       (form-eval a3 env))))
 
 
-(defn eval-seq [exps env]
-  (reduce #(form-eval %2 env) nil exps))
+(defn eval-seq [exp env]
+  (reduce #(form-eval %2 env) nil exp))
 
 (defn eval-let* [exp env]
   (let [eenv (extend-env env)
@@ -111,7 +108,7 @@
   (-> '()
       (extend-env (keys primitive-procs)
                   (map #(list 'primitive %) (vals primitive-procs)))
-      ;;above is base env
+      (built-in!)
       (extend-env)))
 
 
@@ -153,13 +150,19 @@
 
 (defn env-find [var env action not-found]
   (loop [[e & tail] env]
-    (cond (nil? e)       (not-found)
-      (contains? @e var) (action e)
-      :else              (recur tail))))
+    (cond (nil? e)           (not-found)
+          (contains? @e var) (action e)
+          :else              (recur tail))))
 
 (defn env-get [var env]
   (env-find var env
             #(get (deref %) var)
+            #(throw (Exception. "wrong binding id!"))))
+
+(defn env-set [var val env]
+  (env-find var
+            env
+            #(swap! % assoc var (form-eval val env))
             #(throw (Exception. "wrong binding id!"))))
 
 ;;;; macro ;;;;
@@ -180,8 +183,37 @@
         (recur (form-apply mac (rest exp))))
       exp)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;; built-in functions
 
+(defn built-in! [env]
+  (form-eval
+   '(define (map f xs)
+      (if (empty? xs)
+        (quote ())
+        (cons
+         (f (car xs))
+         (map f (cdr xs))))) env)
+
+  (form-eval
+   '(define (reduce f val xs)
+      (if (empty? xs)
+        val
+        (reduce f
+                (f val (car xs))
+                (cdr xs)))) env)
+  
+  (form-eval
+   '(define (filter f xs)
+      (if (empty? xs)
+        (quote ())
+        (let* ((x (car xs))
+               (y (cdr xs)))
+              (if (f x)
+                (cons x (filter f y))
+                (filter f y))))) env)
+  env)
+
+;;;;;;
 (def validate
   (insta/parser
     "S = Symbol | Form
@@ -205,3 +237,6 @@
 
 
 (defn -main  [& args] (repl))
+
+
+

@@ -61,13 +61,26 @@
                             nil))))
     
     (is (= true  (feval '(let* ((x false))
-                            (begin
-                             (when (= 1 1)
-                               (set! x true))
-                             x)))))
+                               (begin
+                                (when (= 1 1)
+                                  (set! x true))
+                                x)))))
     
     (is (= false  (feval '(let* ((x false))
-                            (begin
-                             (when (= 1 2)
-                               (set! x true))
-                             x)))))))
+                                (begin
+                                 (when (= 1 2)
+                                   (set! x true))
+                                 x))))))
+
+  (testing "built-in"
+    (is (= '(1 81 25 9 4 64)  (feval '(map (lambda (x) (* x x))
+                                           (list 1 9 5 3 2 8)))))
+    (is (= '(1 3 2)  (feval '(filter (lambda (x) (< x 5))
+                                     (list 1 9 5 3 2 8)))))
+
+
+    (is (= 28  (feval '(reduce (lambda (x y) (+ x y))
+                               0 
+                               (list 1 9 5 3 2 8)))))))
+
+  
