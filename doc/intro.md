@@ -14,15 +14,13 @@ paginate: true
 
 ---
 
-## Author
+## Who?
  - Sam Lee (misgod.tw@gmail.com)
-
+ - work for Asus
 
 ---
 
 ## An Interpreter
-
-
 
 ![bg fit 90%](https://i.imgur.com/dfnFDZ8.png)
 
@@ -114,9 +112,12 @@ paginate: true
 
 ## Enviroment
 
-{} {build-in fn} {primitive procs}
-( |#atom| <- |#atom|  <- |#atom|)
 
+![bg fit 85%](https://i.imgur.com/VAmQFQu.png)
+
+---
+
+## Enviroment
 
 ```clojure
 
@@ -419,6 +420,24 @@ paginate: true
 <!-- _class: lead -->
 ## Now you can write your own Lisp
 ## in Clojure
+
+
+---
+## Try it
+
+```clojure
+(def env (setup-env))
+
+(form-eval 
+  '(define (fact x)
+     (if (eq? x 1)
+         1
+         (* x (fact (- x 1))))) env) ;=> ok
+
+(form-eval 
+  '(fact 6) env)) ;=> 720
+
+```
 
 ---
 ## Something else
