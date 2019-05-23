@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="C"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><style>@media screen{body,html{background:#000;height:100%;margin:0;overflow:hidden}[data-bespoke-marp-fragment=inactive]{visibility:hidden}.bespoke-marp-osc{display:none;opacity:0}.bespoke-marp-parent{bottom:0;left:0;position:absolute;right:0;top:0}.bespoke-marp-parent>.bespoke-marp-osc{background:rgba(0,0,0,.65);border-radius:7px;bottom:50px;color:#fff;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;left:50%;line-height:0;opacity:1;padding:12px;position:absolute;touch-action:manipulation;-webkit-transform:translateX(-50%);transform:translateX(-50%);transition:opacity .2s linear;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap;z-index:1}.bespoke-marp-parent>.bespoke-marp-osc>*{margin-left:6px}.bespoke-marp-parent>.bespoke-marp-osc>:first-child{margin-left:0}.bespoke-marp-parent>.bespoke-marp-osc>span{opacity:.8}.bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page]{display:inline-block;min-width:140px;text-align:center}.bespoke-marp-parent>.bespoke-marp-osc>button{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:transparent;border:0;color:inherit;cursor:pointer;font-size:inherit;opacity:.8;outline:none;padding:0;transition:opacity .2s linear;-webkit-tap-highlight-color:transparent}.bespoke-marp-parent>.bespoke-marp-osc>button:disabled{cursor:not-allowed;opacity:.15!important}.bespoke-marp-parent>.bespoke-marp-osc>button:hover{opacity:1}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:active{opacity:.6}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled){transition:none}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNNjggOTBMMjggNTBsNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNMzIgOTBsNDAtNDAtNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTQwIDcwSDIwVjUwbTIwIDBMMjAgNzBtNDAtNDBoMjB2MjBtLTIwIDBsMjAtMjAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen].exit{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTIwIDUwaDIwdjIwbS0yMCAwbDIwLTIwbTQwIDBINjBWMzBtMjAgMEw2MCA1MCIvPjwvc3ZnPg==")}.bespoke-marp-parent.bespoke-marp-inactive{cursor:none}.bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc{opacity:0;pointer-events:none}svg.bespoke-marp-slide{height:100%;left:0;pointer-events:none;position:absolute;top:0;width:100%;z-index:-1}svg.bespoke-marp-slide.bespoke-marp-active{pointer-events:auto;z-index:0}.bespoke-progress-parent{background:#222;display:flex;height:5px;width:100%}.bespoke-progress-parent+.bespoke-marp-parent{top:5px}.bespoke-progress-parent .bespoke-progress-bar{flex:0 0 0;background:#0288d1;transition:flex-basis .2s cubic-bezier(0,1,1,1)}}@media print{.bespoke-marp-osc,.bespoke-progress-parent{display:none!important;transition:none!important}.bespoke-marp-parent{top:0}}</style><style>@charset "UTF-8";@import url("https://fonts.googleapis.com/css?family=Lato:400,900|Roboto+Mono:400,700");article#presentation > svg > foreignObject > section {
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><style>@media screen{body,html{background:#000;height:100%;margin:0;overflow:hidden}[data-bespoke-marp-fragment=inactive]{visibility:hidden}.bespoke-marp-osc{display:none;opacity:0}.bespoke-marp-parent{bottom:0;left:0;position:absolute;right:0;top:0}.bespoke-marp-parent>.bespoke-marp-osc{background:rgba(0,0,0,.65);border-radius:7px;bottom:50px;color:#fff;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;left:50%;line-height:0;opacity:1;padding:12px;position:absolute;touch-action:manipulation;-webkit-transform:translateX(-50%);transform:translateX(-50%);transition:opacity .2s linear;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap;z-index:1}.bespoke-marp-parent>.bespoke-marp-osc>*{margin-left:6px}.bespoke-marp-parent>.bespoke-marp-osc>:first-child{margin-left:0}.bespoke-marp-parent>.bespoke-marp-osc>span{opacity:.8}.bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page]{display:inline-block;min-width:140px;text-align:center}.bespoke-marp-parent>.bespoke-marp-osc>button{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:transparent;border:0;color:inherit;cursor:pointer;font-size:inherit;opacity:.8;outline:none;padding:0;transition:opacity .2s linear;-webkit-tap-highlight-color:transparent}.bespoke-marp-parent>.bespoke-marp-osc>button:disabled{cursor:not-allowed;opacity:.15!important}.bespoke-marp-parent>.bespoke-marp-osc>button:hover{opacity:1}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:active{opacity:.6}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled){transition:none}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNNjggOTBMMjggNTBsNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNMzIgOTBsNDAtNDAtNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTQwIDcwSDIwVjUwbTIwIDBMMjAgNzBtNDAtNDBoMjB2MjBtLTIwIDBsMjAtMjAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen].exit{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTIwIDUwaDIwdjIwbS0yMCAwbDIwLTIwbTQwIDBINjBWMzBtMjAgMEw2MCA1MCIvPjwvc3ZnPg==")}.bespoke-marp-parent.bespoke-marp-inactive{cursor:none}.bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc{opacity:0;pointer-events:none}svg.bespoke-marp-slide{height:100%;left:0;pointer-events:none;position:absolute;top:0;width:100%;z-index:-1}svg.bespoke-marp-slide.bespoke-marp-active{pointer-events:auto;z-index:0}.bespoke-progress-parent{background:#222;display:flex;height:5px;width:100%}.bespoke-progress-parent+.bespoke-marp-parent{top:5px}.bespoke-progress-parent .bespoke-progress-bar{flex:0 0 0;background:#0288d1;transition:flex-basis .2s cubic-bezier(0,1,1,1)}}@media print{.bespoke-marp-osc,.bespoke-progress-parent{display:none!important;transition:none!important}.bespoke-marp-parent{top:0}}</style><style>@charset "UTF-8";@import url("https://fonts.googleapis.com/css?family=Lato:400,900|Roboto+Mono:400,700");article#presentation > svg > foreignObject > section {
   width: 1280px;
   height: 720px;
 
@@ -90,7 +90,7 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 }</style></head><body><div class="bespoke-marp-osc"><button data-bespoke-marp-osc="prev" tabindex="-1" title="Previous slide">Previous slide</button><span data-bespoke-marp-osc="page"></span><button data-bespoke-marp-osc="next" tabindex="-1" title="Next slide">Next slide</button><button data-bespoke-marp-osc="fullscreen" tabindex="-1" title="Toggle fullscreen (f)">Toggle fullscreen</button></div><article id="presentation"><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="1" data-paginate="true" data-theme="gaia" data-marpit-pagination="1" style="--paginate:true;--theme:gaia;">
 <p><img src="https://i.imgur.com/kN7MYLz.jpg" alt="w:320" style="width:320px;" /></p>
 <h1>Write Your Own Lisp in Clojure</h1>
-<h3>Making a tiny scheme interpreter</h3>
+<h3>Learn Lisp by making a Lisp</h3>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="2" data-paginate="true" data-theme="gaia" data-marpit-pagination="2" style="--paginate:true;--theme:gaia;">
 <h2>Who?</h2>
@@ -133,13 +133,12 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 <h2>Apply</h2>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-apply [proc args]
   (<span class="hljs-name"><span class="hljs-builtin-name">letfn</span></span> [(<span class="hljs-name">primitive?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'primitive))
-          (<span class="hljs-name">apply-primitive</span> [p a] (<span class="hljs-name"><span class="hljs-builtin-name">apply</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> p) a)) <span class="hljs-comment">;;&lt;-- magic</span>
-          (<span class="hljs-name">compound?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'procedure))
+          (<span class="hljs-name">procedure?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'procedure)) <span class="hljs-comment">;&lt;-- from lambda</span>
           (<span class="hljs-name">proc-params</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> p))
           (<span class="hljs-name">proc-body</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">nth</span></span> p <span class="hljs-number">2</span>))
           (<span class="hljs-name">proc-env</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">nth</span></span> p <span class="hljs-number">3</span>))]
-    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">primitive?</span> proc) (<span class="hljs-name">apply-primitive</span> proc args)
-          (<span class="hljs-name">compound?</span> proc)  (<span class="hljs-name">eval-seq</span> (<span class="hljs-name">proc-body</span> proc)
+    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">primitive?</span> proc) (<span class="hljs-name"><span class="hljs-builtin-name">apply</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> proc) args) <span class="hljs-comment">;&lt;-- magic</span>
+          (<span class="hljs-name">procedure?</span> proc) (<span class="hljs-name">eval-seq</span> (<span class="hljs-name">proc-body</span> proc)
                                       (<span class="hljs-name">extend-env</span> (<span class="hljs-name">proc-env</span> proc)
                                                   (<span class="hljs-name">proc-params</span> proc)
                                                   args)))))
@@ -214,19 +213,22 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-theme="gaia" data-marpit-pagination="13" style="--paginate:true;--theme:gaia;">
 <h2>quote</h2>
-<pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
-    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
-          (<span class="hljs-name"><span class="hljs-builtin-name">symbol?</span></span> exp)           (<span class="hljs-name">env-get</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'quote)  (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> exp)) <span class="hljs-comment">;;&lt;- here</span>
-</span></span></foreignObject></svg></code></pre>
 <ul>
 <li>(quote 1) =&gt; 1</li>
 <li>(quote a) =&gt; a</li>
 <li>(quote (+ 1 1))  =&gt; (+ 1 1)</li>
 </ul>
+<pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
+    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
+          (<span class="hljs-name"><span class="hljs-builtin-name">symbol?</span></span> exp)           (<span class="hljs-name">env-get</span> exp env)
+          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'quote)  (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> exp)) <span class="hljs-comment">;;&lt;- here</span>
+</span></span></foreignObject></svg></code></pre>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-paginate="true" data-theme="gaia" data-marpit-pagination="14" style="--paginate:true;--theme:gaia;">
 <h2>if</h2>
+<ul>
+<li>(if &lt;cond-expr&gt; expr  else-expr)</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
   (<span class="hljs-name"><span class="hljs-builtin-name">let</span></span> [exp (<span class="hljs-name"><span class="hljs-builtin-name">macroexpand</span></span> exp env)]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
@@ -240,12 +242,9 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
       (<span class="hljs-name">form-eval</span> a2 env)
       (<span class="hljs-name">form-eval</span> a3 env))))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(if &lt;cond-expr&gt; expr  else-expr)</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-paginate="true" data-theme="gaia" data-marpit-pagination="15" style="--paginate:true;--theme:gaia;">
-<h2>Why if is a special form?</h2>
+<h2>Why is &quot;if&quot; a special form?</h2>
 <ul>
 <li>Can we just write a if function?</li>
 </ul>
@@ -263,22 +262,27 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-theme="gaia" data-marpit-pagination="16" style="--paginate:true;--theme:gaia;">
 <h2>begin</h2>
+<ul>
+<li>(begin expr1 expr2 ...)</li>
+<li>like &quot;do&quot; in clojure</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
           (<span class="hljs-name"><span class="hljs-builtin-name">symbol?</span></span> exp)           (<span class="hljs-name">env-get</span> exp env)
           (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'quote)  (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> exp)
           (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'if)     (<span class="hljs-name">eval-if</span> exp env)
           (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'begin)  (<span class="hljs-name">eval-seq</span> (<span class="hljs-name"><span class="hljs-builtin-name">rest</span></span> exp) env))) <span class="hljs-comment">; &lt;-- here</span>
-</span></span></foreignObject></svg></code></pre>
-<pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> eval-seq [exp env]
+
+(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> eval-seq [exp env]
   (<span class="hljs-name"><span class="hljs-builtin-name">reduce</span></span> #(<span class="hljs-name">form-eval</span> %<span class="hljs-number">2</span> env) <span class="hljs-literal">nil</span> exp))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>like &quot;do&quot; in clojure</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-paginate="true" data-theme="gaia" data-marpit-pagination="17" style="--paginate:true;--theme:gaia;">
 <h2>lambda</h2>
+<ul>
+<li>(lambda (x y) (+ x y))</li>
+<li>(lambda () 5)</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
   (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
      <span class="hljs-comment">; ...</span>
@@ -290,24 +294,20 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
         (<span class="hljs-name"><span class="hljs-builtin-name">drop</span></span> <span class="hljs-number">2</span> exp)
         env))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(lambda (x y) (+ x y))</li>
-<li>(lambda () 5)</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" data-theme="gaia" data-marpit-pagination="18" style="--paginate:true;--theme:gaia;">
 <h2>define</h2>
+<ul>
+<li>(define x 1)</li>
+<li>(define (f x y) (+ x y))</li>
+<li>(define f (lambda (x y) (+ x y)))</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
   (<span class="hljs-name"><span class="hljs-builtin-name">let</span></span> [exp (<span class="hljs-name"><span class="hljs-builtin-name">macroexpand</span></span> exp env)]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
           <span class="hljs-comment">; ...</span>
           (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'define) (<span class="hljs-name">eval-define</span> exp env)))) <span class="hljs-comment">;&lt;-- here</span>
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(define x 1)</li>
-<li>(define (f x y) (+ x y))</li>
-<li>(define f (lambda (x y) (+ x y)))</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-paginate="true" data-theme="gaia" data-marpit-pagination="19" style="--paginate:true;--theme:gaia;">
 <h2>eval-define</h2>
@@ -331,6 +331,10 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-paginate="true" data-theme="gaia" data-marpit-pagination="20" style="--paginate:true;--theme:gaia;">
 <h2>set!</h2>
+<ul>
+<li>(define x 5)<br />
+(set! x 10)</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
           <span class="hljs-comment">;...</span>
@@ -341,13 +345,12 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
   (<span class="hljs-name"><span class="hljs-builtin-name">let</span></span> [[op var val] exp]
     (<span class="hljs-name">env-set</span> var val env)))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(define x 5)<br />
-(set! x 10)</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-theme="gaia" data-marpit-pagination="21" style="--paginate:true;--theme:gaia;">
 <h2>let*</h2>
+<ul>
+<li>(let* ((var val) ...) body)</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
           <span class="hljs-comment">;...</span>
@@ -360,12 +363,12 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
       (<span class="hljs-name"><span class="hljs-builtin-name">swap!</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> eenv) assoc b (<span class="hljs-name">form-eval</span> e eenv)))
     (<span class="hljs-name">form-eval</span> body eenv)))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(let* ((var val) ...) body)</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" data-theme="gaia" data-marpit-pagination="22" style="--paginate:true;--theme:gaia;">
 <h2>defmacro</h2>
+<ul>
+<li>(defmacro binding (lambda (args) body))</li>
+</ul>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
           <span class="hljs-comment">;...</span>
@@ -377,9 +380,6 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
        (<span class="hljs-name"><span class="hljs-builtin-name">swap!</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> env) assoc a1  mbody)
        <span class="hljs-string">"ok"</span>))
 </span></span></foreignObject></svg></code></pre>
-<ul>
-<li>(defmacro binding (lambda (args) body))</li>
-</ul>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="true" data-theme="gaia" data-marpit-pagination="23" style="--paginate:true;--theme:gaia;">
 <h2>macroexpand</h2>
@@ -412,16 +412,7 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-eval [exp env]
   (<span class="hljs-name"><span class="hljs-builtin-name">let</span></span> [exp (<span class="hljs-name"><span class="hljs-builtin-name">macroexpand</span></span> exp env)]
     (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">self-evaluating?</span> exp)  exp
-          (<span class="hljs-name"><span class="hljs-builtin-name">symbol?</span></span> exp)           (<span class="hljs-name">env-get</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'quote)  (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> exp)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'if)     (<span class="hljs-name">eval-if</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'begin)  (<span class="hljs-name">eval-seq</span> (<span class="hljs-name"><span class="hljs-builtin-name">rest</span></span> exp) env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'lambda) (<span class="hljs-name">eval-lambda</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'define) (<span class="hljs-name">eval-define</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'set!)   (<span class="hljs-name">eval-assignment</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'let*)   (<span class="hljs-name">eval-let*</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'defmacro) (<span class="hljs-name">eval-defmacro</span> exp env)
-          (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) 'macroexpand) (<span class="hljs-name"><span class="hljs-builtin-name">macroexpand</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> exp) env)
+          <span class="hljs-comment">;...</span>
           <span class="hljs-symbol">:else</span> (<span class="hljs-name">form-apply</span> (<span class="hljs-name">form-eval</span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> exp) env)  <span class="hljs-comment">;&lt;-- here</span>
                             (<span class="hljs-name"><span class="hljs-builtin-name">map</span></span> #(<span class="hljs-name">form-eval</span> % env) (<span class="hljs-name"><span class="hljs-builtin-name">rest</span></span> exp)))))
 </span></span></foreignObject></svg></code></pre>
@@ -430,12 +421,11 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 <h2>apply</h2>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">defn</span></span> form-apply [proc args]
   (<span class="hljs-name"><span class="hljs-builtin-name">letfn</span></span> [(<span class="hljs-name">primitive?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'primitive))
-          (<span class="hljs-name">apply-primitive</span> [p a] (<span class="hljs-name"><span class="hljs-builtin-name">apply</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> p) a)) <span class="hljs-comment">;&lt;-- magic</span>
-          (<span class="hljs-name">procedure?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'procedure)) <span class="hljs-comment">;&lt;-- from lambda</span>
+          (<span class="hljs-name">procedure?</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">=</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">first</span></span> p) 'procedure)) <span class="hljs-comment">;;&lt;-- from lambda</span>
           (<span class="hljs-name">proc-params</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> p))
           (<span class="hljs-name">proc-body</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">nth</span></span> p <span class="hljs-number">2</span>))
           (<span class="hljs-name">proc-env</span> [p] (<span class="hljs-name"><span class="hljs-builtin-name">nth</span></span> p <span class="hljs-number">3</span>))]
-    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">primitive?</span> proc) (<span class="hljs-name">apply-primitive</span> proc args)
+    (<span class="hljs-name"><span class="hljs-builtin-name">cond</span></span> (<span class="hljs-name">primitive?</span> proc) (<span class="hljs-name"><span class="hljs-builtin-name">apply</span></span> (<span class="hljs-name"><span class="hljs-builtin-name">second</span></span> proc) args) <span class="hljs-comment">;;&lt;-- magic</span>
           (<span class="hljs-name">procedure?</span> proc) (<span class="hljs-name">eval-seq</span> (<span class="hljs-name">proc-body</span> proc)
                                       (<span class="hljs-name">extend-env</span> (<span class="hljs-name">proc-env</span> proc)
                                                   (<span class="hljs-name">proc-params</span> proc)
@@ -450,13 +440,13 @@ article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced
 <h2>Try it</h2>
 <pre><code class="language-clojure"><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>(<span class="hljs-name"><span class="hljs-builtin-name">def</span></span> env (<span class="hljs-name">setup-env</span>))
 
-(<span class="hljs-name">form-eval</span> 
+(<span class="hljs-name">form-eval</span>
   '(<span class="hljs-name">define</span> (<span class="hljs-name">fact</span> x)
      (<span class="hljs-name"><span class="hljs-builtin-name">if</span></span> (<span class="hljs-name">eq?</span> x <span class="hljs-number">1</span>)
          <span class="hljs-number">1</span>
          (<span class="hljs-name"><span class="hljs-builtin-name">*</span></span> x (<span class="hljs-name">fact</span> (<span class="hljs-name"><span class="hljs-builtin-name">-</span></span> x <span class="hljs-number">1</span>))))) env) <span class="hljs-comment">;=&gt; ok</span>
 
-(<span class="hljs-name">form-eval</span> 
+(<span class="hljs-name">form-eval</span>
   '(<span class="hljs-name">fact</span> <span class="hljs-number">6</span>) env)) <span class="hljs-comment">;=&gt; 720</span>
 
 </span></span></foreignObject></svg></code></pre>

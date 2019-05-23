@@ -9,8 +9,7 @@ paginate: true
 ![w:320](https://i.imgur.com/kN7MYLz.jpg)
 
 # Write Your Own Lisp in Clojure
-### Making a tiny scheme interpreter
-
+### Learn Lisp by making a Lisp
 
 ---
 
@@ -19,6 +18,7 @@ paginate: true
  - work for Asus
 
 ---
+
 
 ## An Interpreter
 
@@ -38,7 +38,6 @@ paginate: true
 
 
 ---
-
 
 ## Eval
 
@@ -66,18 +65,16 @@ paginate: true
 ```clojure
 (defn form-apply [proc args]
   (letfn [(primitive? [p] (= (first p) 'primitive))
-          (apply-primitive [p a] (apply (second p) a)) ;;<-- magic
-          (compound? [p] (= (first p) 'procedure))
+          (procedure? [p] (= (first p) 'procedure)) ;<-- from lambda
           (proc-params [p] (second p))
           (proc-body [p] (nth p 2))
           (proc-env [p] (nth p 3))]
-    (cond (primitive? proc) (apply-primitive proc args)
-          (compound? proc)  (eval-seq (proc-body proc)
+    (cond (primitive? proc) (apply (second proc) args) ;<-- magic
+          (procedure? proc) (eval-seq (proc-body proc)
                                       (extend-env (proc-env proc)
                                                   (proc-params proc)
                                                   args)))))
 ```
-
 
 ---
 
@@ -105,7 +102,7 @@ paginate: true
     (or (number? x)
         (string? x)
         (nil? x)
-        (instance? Boolean x)))
+        (boolean? x)))
 ```
 
 ---
@@ -154,6 +151,10 @@ paginate: true
 
 ## quote
 
+- (quote 1) => 1
+- (quote a) => a
+- (quote (+ 1 1))  => (+ 1 1)
+
 ```clojure
 (defn form-eval [exp env]
     (cond (self-evaluating? exp)  exp
@@ -162,13 +163,13 @@ paginate: true
 ```
 
 
-- (quote 1) => 1
-- (quote a) => a
-- (quote (+ 1 1))  => (+ 1 1)
 
 ---
 
 ## if
+
+
+- (if <cond-expr> expr  else-expr)
 
 ```clojure
 (defn form-eval [exp env]
@@ -185,11 +186,9 @@ paginate: true
       (form-eval a3 env))))
 ```
 
-- (if <cond-expr> expr  else-expr)
-
 ---
 
-## Why if is a special form?
+## Why is "if" a special form?
 
 - Can we just write a if function?
 
@@ -210,6 +209,9 @@ paginate: true
 
 ## begin
 
+- (begin expr1 expr2 ...)
+- like "do" in clojure
+
 ```clojure
 (defn form-eval [exp env]
     (cond (self-evaluating? exp)  exp
@@ -217,18 +219,17 @@ paginate: true
           (= (first exp) 'quote)  (second exp)
           (= (first exp) 'if)     (eval-if exp env)
           (= (first exp) 'begin)  (eval-seq (rest exp) env))) ; <-- here
-```
 
-```clojure
 (defn eval-seq [exp env]
   (reduce #(form-eval %2 env) nil exp))
 ```
 
-- like "do" in clojure
-
 ---
 
 ## lambda
+
+- (lambda (x y) (+ x y))
+- (lambda () 5)
 
 ```clojure
 (defn form-eval [exp env]
@@ -243,12 +244,13 @@ paginate: true
         env))
 ```
 
-- (lambda (x y) (+ x y))
-- (lambda () 5)
-
 ---
 
 ## define
+
+- (define x 1)
+- (define (f x y) (+ x y))
+- (define f (lambda (x y) (+ x y)))
 
 ```clojure
 (defn form-eval [exp env]
@@ -257,10 +259,6 @@ paginate: true
           ; ...
           (= (first exp) 'define) (eval-define exp env)))) ;<-- here
 ```
-
-- (define x 1)
-- (define (f x y) (+ x y))
-- (define f (lambda (x y) (+ x y)))
 
 ---
 ## eval-define
@@ -288,6 +286,9 @@ paginate: true
 
 ## set!
 
+- (define x 5)
+  (set! x 10)
+
 ```clojure
 (defn form-eval [exp env]
     (cond (self-evaluating? exp)  exp
@@ -300,13 +301,11 @@ paginate: true
     (env-set var val env)))
 ```
 
-- (define x 5)
-  (set! x 10)
-
-
 ---
 ## let*
 
+
+- (let* ((var val) ...) body)
 
 ```clojure
 (defn form-eval [exp env]
@@ -322,11 +321,13 @@ paginate: true
     (form-eval body eenv)))
 ```
 
-- (let* ((var val) ...) body)
 
 ---
 
 ## defmacro
+
+
+- (defmacro binding (lambda (args) body))
 
 ```clojure
 (defn form-eval [exp env]
@@ -341,7 +342,6 @@ paginate: true
        "ok"))
 ```
 
-- (defmacro binding (lambda (args) body))
 
 ---
 
@@ -382,16 +382,7 @@ paginate: true
 (defn form-eval [exp env]
   (let [exp (macroexpand exp env)]
     (cond (self-evaluating? exp)  exp
-          (symbol? exp)           (env-get exp env)
-          (= (first exp) 'quote)  (second exp)
-          (= (first exp) 'if)     (eval-if exp env)
-          (= (first exp) 'begin)  (eval-seq (rest exp) env)
-          (= (first exp) 'lambda) (eval-lambda exp env)
-          (= (first exp) 'define) (eval-define exp env)
-          (= (first exp) 'set!)   (eval-assignment exp env)
-          (= (first exp) 'let*)   (eval-let* exp env)
-          (= (first exp) 'defmacro) (eval-defmacro exp env)
-          (= (first exp) 'macroexpand) (macroexpand (second exp) env)
+          ;...
           :else (form-apply (form-eval (first exp) env)  ;<-- here
                             (map #(form-eval % env) (rest exp)))))
 ```
@@ -403,12 +394,11 @@ paginate: true
 ```clojure
 (defn form-apply [proc args]
   (letfn [(primitive? [p] (= (first p) 'primitive))
-          (apply-primitive [p a] (apply (second p) a)) ;<-- magic
-          (procedure? [p] (= (first p) 'procedure)) ;<-- from lambda
+          (procedure? [p] (= (first p) 'procedure)) ;;<-- from lambda
           (proc-params [p] (second p))
           (proc-body [p] (nth p 2))
           (proc-env [p] (nth p 3))]
-    (cond (primitive? proc) (apply-primitive proc args)
+    (cond (primitive? proc) (apply (second proc) args) ;;<-- magic
           (procedure? proc) (eval-seq (proc-body proc)
                                       (extend-env (proc-env proc)
                                                   (proc-params proc)
@@ -428,13 +418,13 @@ paginate: true
 ```clojure
 (def env (setup-env))
 
-(form-eval 
+(form-eval
   '(define (fact x)
      (if (eq? x 1)
          1
          (* x (fact (- x 1))))) env) ;=> ok
 
-(form-eval 
+(form-eval
   '(fact 6) env)) ;=> 720
 
 ```

@@ -29,12 +29,11 @@
 
 (defn form-apply [proc args]
   (letfn [(primitive? [p] (= (first p) 'primitive))
-          (apply-primitive [p a] (apply (second p) a)) ;;<-- magic
           (procedure? [p] (= (first p) 'procedure)) ;;<-- from lambda
           (proc-params [p] (second p))
           (proc-body [p] (nth p 2))
           (proc-env [p] (nth p 3))]
-    (cond (primitive? proc) (apply-primitive proc args)
+    (cond (primitive? proc) (apply (second proc) args) ;;<-- magic
           (procedure? proc) (eval-seq (proc-body proc)
                                       (extend-env (proc-env proc)
                                                   (proc-params proc)
@@ -65,7 +64,7 @@
   (or (number? x)
       (string? x)
       (nil? x)
-      (instance? Boolean x)))
+      (boolean? x)))
 
 (defn eval-assignment [exp env]
   (let [[op var val] exp]
