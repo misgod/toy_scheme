@@ -135,7 +135,8 @@ paginate: true
   (-> '()
       (extend-env (keys primitive-procs)
                   (map #(list 'primitive %) (vals primitive-procs)))
-      ;;above is base env
+      (extend-env)
+      (built-in!)
       (extend-env)))
 ```
 ```clojure

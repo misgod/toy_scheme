@@ -64,7 +64,7 @@
   (or (number? x)
       (string? x)
       (nil? x)
-      (boolean? x)))
+      (instance? Boolean x)))
 
 (defn eval-assignment [exp env]
   (let [[op var val] exp]
@@ -107,6 +107,7 @@
   (-> '()
       (extend-env (keys primitive-procs)
                   (map #(list 'primitive %) (vals primitive-procs)))
+      (extend-env)
       (built-in!)
       (extend-env)))
 
