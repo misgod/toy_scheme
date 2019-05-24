@@ -7,7 +7,7 @@
 
 
 (declare  form-eval form-apply self-evaluating? eval-seq setup-env extend-env  env-find env-set env-get  
-          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*  macroexpand built-in!)
+          eval-define eval-lambda eval-if eval-defmacro eval-assignment eval-let*  macroexpand set-built-in!)
 
 
 (defn form-eval [exp env]
@@ -64,7 +64,7 @@
   (or (number? x)
       (string? x)
       (nil? x)
-      (instance? Boolean x)))
+      (boolean? x)))
 
 (defn eval-assignment [exp env]
   (let [[op var val] exp]
@@ -108,7 +108,7 @@
       (extend-env (keys primitive-procs)
                   (map #(list 'primitive %) (vals primitive-procs)))
       (extend-env)
-      (built-in!)
+      (set-built-in!)
       (extend-env)))
 
 
@@ -185,7 +185,7 @@
 
 ;;;;;; built-in functions
 
-(defn built-in! [env]
+(defn set-built-in! [env]
   (form-eval
    '(define (map f xs)
       (if (empty? xs)
@@ -237,6 +237,3 @@
 
 
 (defn -main  [& args] (repl))
-
-
-

@@ -13,13 +13,6 @@ paginate: true
 
 ---
 
-## Who?
- - Sam Lee (misgod.tw@gmail.com)
- - work for Asus
-
----
-
-
 ## An Interpreter
 
 ![bg fit 90%](https://i.imgur.com/dfnFDZ8.png)
