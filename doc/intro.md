@@ -24,7 +24,7 @@ paginate: true
 # Demo
 
 ---
-## Eval & Apply
+## Meta-circular evaluator
 <!-- _backgroundColor: #ffffff -->
 
 ![](http://www.sicpdistilled.com/images/evalapply-dae3af78.png)
@@ -34,23 +34,8 @@ paginate: true
 
 ## Eval
 
-```clojure
-(defn form-eval [exp env]
-  (let [exp (macroexpand exp env)]
-    (cond (self-evaluating? exp)  exp
-          (symbol? exp)           (env-get exp env)
-          (= (first exp) 'quote)  (second exp)
-          (= (first exp) 'if)     (eval-if exp env)
-          (= (first exp) 'begin)  (eval-seq (rest exp) env)
-          (= (first exp) 'lambda) (eval-lambda exp env)
-          (= (first exp) 'define) (eval-define exp env)
-          (= (first exp) 'set!)   (eval-assignment exp env)
-          (= (first exp) 'let*)   (eval-let* exp env)
-          (= (first exp) 'defmacro) (eval-defmacro exp env)
-          (= (first exp) 'macroexpand) (macroexpand (second exp) env)
-          :else (form-apply (form-eval (first exp) env)
-                            (map #(form-eval % env) (rest exp)))))
-```
+![](https://i.imgur.com/SLWVoCu.png)
+
 
 ---
 ## Apply
@@ -71,20 +56,10 @@ paginate: true
 
 ---
 
-## Eval
-- Primitive expressions
-  - self-evaluating expressions
-  - variables
-
-- Special forms
-  - quoted expression
-  - define, if, begin, lambda ...
-
-- Combinations
-
----
-
 ## Primitive expressions
+
+- true, 123, "words" nil
+- var, my-fn
 
 ```Clojure
 (defn form-eval [exp env]
@@ -117,6 +92,7 @@ paginate: true
 
 (defn env-set [var val env] ...)
 
+(defn extend-env [env] ...)
 
 ```
 
@@ -131,15 +107,14 @@ paginate: true
       (extend-env)
       (built-in!)
       (extend-env)))
-```
-```clojure
+
 (def primitive-procs {'true true
                       '+   +
-                      '-   -
                       'car first
-                      ...
-                      })
+                      ...})
 ```
+
+[primitive-procs](https://github.com/misgod/toy_scheme/blob/94fd6ca10071ed04d69ffaf0379495c66c24467c/src/toy_scheme/core.clj#L42-L61)
 
 ---
 
@@ -155,8 +130,6 @@ paginate: true
           (symbol? exp)           (env-get exp env)
           (= (first exp) 'quote)  (second exp)) ;;<- here
 ```
-
-
 
 ---
 
@@ -370,7 +343,7 @@ paginate: true
 
 ---
 
-## to apply
+## apply else
 
 ```clojure
 (defn form-eval [exp env]
@@ -423,11 +396,13 @@ paginate: true
 
 ```
 
----
-## Something else
+[More examples](https://github.com/misgod/toy_scheme/blob/master/test/toy_scheme/core_test.clj)
 
-- Add your built-in functions
-- REPL
+---
+## Still some thing
+
+- Add your [built-in functions](https://github.com/misgod/toy_scheme/blob/94fd6ca10071ed04d69ffaf0379495c66c24467c/src/toy_scheme/core.clj#L188-L214)
+- [REPL](https://github.com/misgod/toy_scheme/blob/94fd6ca10071ed04d69ffaf0379495c66c24467c/src/toy_scheme/core.clj#L225-L236)
 
 ---
 <!-- _color: #e0e0e0 -->
